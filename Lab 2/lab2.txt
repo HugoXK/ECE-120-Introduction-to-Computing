@@ -1,0 +1,50 @@
+Signed integer computation
+
+1. What is the largest value representable in 16-bit signed format? Smallest?
+Answer:32767(2^15-1);-32768(-2^15).
+2. What is the result of the third computation? Why?
+Answer:It is -22536. [ 21000(x5208) + 22000(x55f0) = -22536(xa7f8).]
+       Because this is "positive+positive=negative" format, and an 2's complement overflow happens.
+3. Why does the fourth computation overflow, but not the fifth?
+Answer:Because the range that signed 16-bit mode can express is from -32768 to 32767. When we use it to add 32767 and 1, actually an overflow occurs.But -32767-1 equals to -32768, it is not out of range.
+4. If you were to start at 0, and increment repeatedly (add 1), what pattern would you see (in signed mode)?
+
+Unsigned integer computation
+
+1. What is the largest value representable in 16-bit unsigned format? Smallest?
+Answer:65535(2^16-1);0.
+2. What result do you get from the first computation? Why?
+Answer: 65437(xff9d).
+	Because 100-199 should be an negative value, which is out of the range that the unsigned 16-bit representation can express, thus we will get a very large number.
+3. Why doesn't the second or third computation overflow?
+4. If you were to start at 0, and increment repeatedly (add 1), what pattern would you see (in unsigned mode)?
+5. What are the advantages and disadvantages of unsigned formats (compared to signed formats)?
+
+Multiplication, division, modulus
+
+1. What result do you get in the second and third computations? Why?
+Answer: The second result is -15536(xc350) and the third result is 15536(x3cb0).
+	Because overflow occurs in both these two computation.The second one: 50000-65536=-15536 & the third one:-50000+65536=15536.
+2. What results do you get from computations 4-7? Why? (Hint: can signed 16-bit encoding represent fractions?)
+Answer: The result I get: 12/3=4   11/3=3    10/3=3    9/3=3
+	Because the signed 16-bit encoding can only represent integer. All fraction will be rounded down towards zero to a integer.
+3. Does the result from computations 4-7 get rounded to the nearest integer? If not, what actually happens? Where might this behavior be useful? (Hint: what if you wanted to divide 11 candies between 3 people?)
+4. What does the modulus operator do for positive integers?
+5. What happens when you divide by 0? Modulus with 0? What happens to the binary-calculator program? Why might this be a good thing? (Hint: remember the discussion introduction?)
+6. Excluding division by 0, characterize the behavior of the modulus operation for positive and negative divisors and dividends (for a total of 2x2 = 4 combinations).
+
+Floating point
+
+1. Why is there an error in the fourth computation, but not the third? (Hint: how do you encode 0.25 and 0.3 in floating point?)
+Answer:Because 0.25 equals to 2^(-2) which can be represent in mantissa part accurately while 0.3 can not. Some accuracy error may occurs when we do calculation with 0.3.
+2. How does the result of the fifth computation compare to the fourth? Explain. (Hint: look at the hex representations of the results. How does the floating point format handle negative numbers?)
+Answer:The fifth computation results in -99.699997(xc2c76666) while the fourth computation results in 99.699997(x42c76666).The only difference between them is the sign. It is apparently that they are the same in "2c76666" part and only difference is "c" and "4". They are complementary in Hex representation (C+4=16 in Hex representation). In floating-point format we use the first bit to represent the sign, 1 represents negative and 0 represents positive.
+3. Mathematically, would you expect the same results in computations 6 and 7? Do you observe this result experimentally? Explain. (Hint: try stepping through each computation)
+Answer: No.According to my experiment, the result of computation 6 is -5.000000 while the senventh is -4.999900.
+	Make these two computation step by step we can get that:
+	9000+0.0002=9000.0000    9000.0000-9005=-5.0000 There is an accuracy error happens   in the first step for the limited bits.
+	9000-9005=-5.0000     -5.0000+0.0001=-4.999900 Actually, this is the right answer.
+4. What happens if you try computation 6 in double-precision (64-bit) floating-point mode? Why?
+5. Why is there noticeable error in computation 8, but not 9? (Hint: think of multiplying floating point numbers like multiplying two numbers in scientific notation, how do you do it?)
+6. The root cause of the Ariane 5 rocket failure was isolated to the conversion of a floating point number, which stored the horizontal component of the rocket's velocity, to a 16-bit signed integer. What is the most likely cause of the failure? (Hint: this wasn't some small rounding error, the computed velocity was way off, causing the system to go haywire)
+

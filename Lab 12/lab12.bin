@@ -1,0 +1,35 @@
+; This is the file you will use for the lab assignment
+; Make sure to comment your code properly and don't exceed 
+; the line limitation for this assignment.  Good luck!
+
+0011 0001 0000 0000 ; x3100 - starting address of the program
+
+; The program description and code starts here
+
+; Name: Xu Ke
+; Date: 2020.05.01
+; This code is written for ECE120 Lab12
+; The function of this program is to compute the sum of positive numbers among a set of 10 numbers represented in 2's complement format and will store the result in register R5.
+
+;Register table
+; R3 | a pointer for reading the numbers
+; R4 | a counter for controlling the times of the loop
+; R5 | holds the value of the sum of positive numbers
+; R6 | temporary hold for the loaded value
+
+; Initialize Registers
+1110 011 000110001    ; R3 <- PC+x0031           
+0101 100 100 1 00000  ; R4 <- 0                clear the current value
+0001 100 100 1 01010  ; R4 <- R4+10            initialize Register 4 to 10
+0101 101 101 1 00000  ; R5 <- 0                initialize Register 5 to 0
+
+; Set up the loop
+0110 110 011 000000   ; R6 <- M[R3+x0]         load in one value from memory
+0000 100 000000001    ; if n, PC <- PC+x1      ignore next step if negative
+0001 101 101 0 00 110 ; R5 <- R5+R6            add and store in R5
+0001 011 011 1 00001  ; R3 <- R3+1             increment R3
+0001 100 100 1 11111  ; R4 <- R4-1             decrement R4
+0000 001 111111010    ; if p, PC <- PC-6       do the same operation for the next value
+
+; Halt the program
+1111 0000 00100101    ; halt                   the program stop

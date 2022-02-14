@@ -1,0 +1,25 @@
+Question 1: Describe the errors that occur when trying to assemble lab13.asm. Identify the cause of each error.
+
+"14:illegal operands for missing opcode" Because there should be a .ORIG before the x3000.
+"16:instruction appeears before .ORIG" This instruction appear before .ORIG because line 14 lack of .ORIG
+"17:constant outside of the allowed range" the PC+offset (x3000) is out of the range allowed (offset only has 9 bits). Besides, in LD operation we should use offset instead of address.
+"19:illegal operands for ADD" there's ADD format error because of an extra ","
+"30:constant outside of the allowed range" the PC+offset is out of the range allowed.(The same as "17")
+"32:label OUTERLOOP has already appeared" We should replace "BRzp" with "BRpz" because "BRpz" is not valid and it leads to the label OUTERLOOP occurs twice.
+"35:constant outside of the allowed range" the PC+offset is out of the range allowed.(The same as "17")
+"43:no .END directive found" Because there should be a .END at the end of the program
+
+
+Question 2: For each label in the code, write down the corresponding memory location. 
+
+OUTERLOOP   x3006
+INNERLOOP   x3007
+INPUT       x3010
+ZERO        x3011
+NEGA_ONE    x3012
+RESULT      x3013
+
+Question 3: Between using labels and explicit memory locations/offsets, which one makes the most sense, and why?
+
+Using labels will make the most sense.
+Reason: By using labels, the actual offsets will be calculated automatically, which lightens the burden on people and reduces the probability of making mistakes. Also, while debuging, using labels makes it easier because we don't need to change all other offsets.
